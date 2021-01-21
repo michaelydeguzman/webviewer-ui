@@ -37,6 +37,7 @@ import FontHandler from 'components/FontHandler';
 import ZoomOverlay from 'components/ZoomOverlay';
 import CreateStampModal from 'components/CreateStampModal';
 import CustomModal from 'components/CustomModal';
+import TranslationModal from 'components/TranslationModal';
 
 import defineReaderControlAPIs from 'src/apis';
 import loadDocument from 'helpers/loadDocument';
@@ -67,7 +68,7 @@ const App = ({ removeEventHandlers }) => {
       const doesAutoLoad = getHashParams('auto_load', true);
       const initialDoc = getHashParams('d', '');
       const startOffline = getHashParams('startOffline', false);
-  
+
       if ((initialDoc && doesAutoLoad) || startOffline) {
         const options = {
           extension: getHashParams('extension', null),
@@ -75,7 +76,7 @@ const App = ({ removeEventHandlers }) => {
           externalPath: getHashParams('p', ''),
           documentId: getHashParams('did', null),
         };
-  
+
         loadDocument(dispatch, initialDoc, options);
       }
     }
@@ -146,6 +147,7 @@ const App = ({ removeEventHandlers }) => {
         <EditTextModal />
         <FilterAnnotModal />
         <CustomModal />
+        <TranslationModal />
       </div>
 
       <PrintHandler />
