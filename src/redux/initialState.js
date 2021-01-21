@@ -319,6 +319,7 @@ export default {
       { dataElement: 'textStrikeoutToolButton' },
       { dataElement: 'textRedactToolButton' },
       { dataElement: 'linkButton' },
+      { dataElement: 'textTranslateToolButton' },
     ],
     contextMenuPopup: [
       { dataElement: 'panToolButton' },
