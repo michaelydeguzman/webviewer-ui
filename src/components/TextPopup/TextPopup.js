@@ -87,7 +87,13 @@ const TextPopup = ({ t }) => {
             role="option"
           />
         )}
-        <ActionButton dataElement="copyTextButton" title="action.copy" img="ic_copy_black_24px" onClick={copyText} role="option" />
+        <ActionButton
+          dataElement="copyTextButton"
+          title="action.copy"
+          img="ic_copy_black_24px"
+          onClick={copyText}
+          role="option"
+        />
         <ActionButton
           dataElement="textHighlightToolButton"
           title="annotation.highlight"
@@ -121,6 +127,13 @@ const TextPopup = ({ t }) => {
           img="icon-tool-link"
           onClick={() => dispatch(actions.openElement('linkModal'))}
           dataElement="linkButton"
+          role="option"
+        />
+        <ActionButton
+          title="tool.Translation"
+          img="icon-tool-text-translation"
+          onClick={() => dispatch(actions.openElement('translationModal'))}
+          dataElement="textTranslateToolButton"
           role="option"
         />
         {core.isCreateRedactionEnabled() && (
