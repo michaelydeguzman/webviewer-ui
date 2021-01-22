@@ -21,9 +21,11 @@ const TranslationModal = () => {
   ]);
   const dispatch = useDispatch();
   const selectedText = core.getSelectedText();
+  const [sourceText, setSourceText] = useState('');
   const [translatedText, setTranslatedText] = useState('');
-  const [sourceLanguage, setSourceLanguage] = useState('');
-  const [targetLanguage, setTargetLanguage] = useState('German');
+  const [sourceLanguage, setSourceLanguage] = useState('Loading...');
+  const [targetLanguage, setTargetLanguage] = useState('English');
+  const [inputChangeTimeoutId, setinputChangeTimeoutId] = useState();
 
   useEffect(() => {
     const onDocumentLoaded = () => {
@@ -39,14 +41,31 @@ const TranslationModal = () => {
     if (!isOpen) {
       return;
     }
-    const go = async() => {
-      const translations = await translate(selectedText, supportedLanguagesMap[targetLanguage]);
-      setTranslatedText(translations[0].translatedText);
-      const { detectedSourceLanguage } = translations[0];
-      setSourceLanguage(Object.keys(supportedLanguagesMap).find(key => supportedLanguagesMap[key] === detectedSourceLanguage));
-    };
-    go();
-  }, [isOpen,targetLanguage]);
+    setSourceText(selectedText);
+    getTranslation(selectedText, targetLanguage);
+  }, [isOpen]);
+
+  const handleInputChange = e => {
+    const value = e.target.value;
+    setSourceText(value);
+    inputChangeTimeoutId && window.clearTimeout(inputChangeTimeoutId);
+    const timeoutId = window.setTimeout(() => {
+      getTranslation(value, targetLanguage);
+    }, 500);
+    setinputChangeTimeoutId(timeoutId);
+  };
+
+  const handleLanguageChange = language => {
+    setTargetLanguage(language);
+    getTranslation(sourceText, language);
+  };
+
+  const getTranslation = async(text, language) => {
+    const translations = await translate(text, supportedLanguagesMap[language]);
+    setTranslatedText(translations[0].translatedText);
+    const { detectedSourceLanguage } = translations[0];
+    setSourceLanguage(Object.keys(supportedLanguagesMap).find(key => supportedLanguagesMap[key] === detectedSourceLanguage));
+  };
 
   const closeModal = () => {
     dispatch(actions.closeElement('translationModal'));
@@ -79,9 +98,11 @@ const TranslationModal = () => {
               <h3 className="source-language">{sourceLanguage}</h3>
               <textarea
                 rows="10"
-                cols="30"
+                cols="35"
                 className="translation-text-area"
-                defaultValue={selectedText}
+                value={sourceText}
+                wrap="hard"
+                onChange={handleInputChange}
                 aria-label="translation-text-area"
               />
             </div>
@@ -92,18 +113,17 @@ const TranslationModal = () => {
                 items={Object.keys(supportedLanguagesMap)}
                 // translationPrefix="option.notesOrder"
                 currentSelectionKey={targetLanguage}
-                onClickItem={language => setTargetLanguage(language)}
+                onClickItem={handleLanguageChange}
                 width={180}
               />
               <textarea
                 rows="10"
-                cols="30"
+                cols="35"
                 className="translation-text-area"
                 defaultValue={translatedText}
                 aria-label="translation-text-area"
               />
             </div>
-
           </div>
         </div>
 
