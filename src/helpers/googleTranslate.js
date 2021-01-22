@@ -46,6 +46,6 @@ export const supportedLanguagesMap = {
   'Dutch': 'nl',
   'Portuguese': 'pt',
   'Russian': 'ru',
-  'Chinese (Simplified)': 'zh_CN',
-  'Chinese (Traditional)': 'zh_TW'
+  'Chinese (Simplified)': 'zh_cn',
+  'Chinese (Traditional)': 'zh_tw'
 };
