@@ -16,14 +16,15 @@ const propTypes = {
   currentSelectionKey: PropTypes.string,
   translationPrefix: PropTypes.string,
   dataElement: PropTypes.string,
+  width: PropTypes.number
 };
 
-function Dropdown({ items = [], currentSelectionKey, translationPrefix, onClickItem, dataElement }) {
+function Dropdown({ items = [], currentSelectionKey, translationPrefix, onClickItem, dataElement, width }) {
   const  { t, ready: tReady } = useTranslation();
   const overlayRef = useRef(null);
   const buttonRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [itemsWidth] = useState(DEFAULT_WIDTH);
+  const [itemsWidth] = useState(width || DEFAULT_WIDTH);
 
   const onClose = useCallback(() => setIsOpen(false), []);
   const onToggle = useCallback(() => setIsOpen(prev => !prev), []);
