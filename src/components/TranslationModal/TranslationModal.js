@@ -22,7 +22,8 @@ const TranslationModal = () => {
   const dispatch = useDispatch();
   const selectedText = core.getSelectedText();
   const [translatedText, setTranslatedText] = useState('');
-  const [targetLanguage, setTargetLanguage] = useState('');
+  const [sourceLanguage, setSourceLanguage] = useState('');
+  const [targetLanguage, setTargetLanguage] = useState('German');
 
   useEffect(() => {
     const onDocumentLoaded = () => {
@@ -41,6 +42,8 @@ const TranslationModal = () => {
     const go = async() => {
       const translations = await translate(selectedText, supportedLanguagesMap[targetLanguage]);
       setTranslatedText(translations[0].translatedText);
+      const { detectedSourceLanguage } = translations[0];
+      setSourceLanguage(Object.keys(supportedLanguagesMap).find(key => supportedLanguagesMap[key] === detectedSourceLanguage));
     };
     go();
   }, [isOpen,targetLanguage]);
@@ -71,22 +74,37 @@ const TranslationModal = () => {
       >
         <div className="container" onMouseDown={e => e.stopPropagation()}>
           <div className="swipe-indicator" />
-          <Dropdown
-            className="translation-supported-languages-dropdown"
-            dataElement="translationSupportedLanguagesDropdown"
-            items={Object.keys(supportedLanguagesMap)}
-            // translationPrefix="option.notesOrder"
-            currentSelectionKey={targetLanguage}
-            onClickItem={language => setTargetLanguage(language)}
-            width={180}
-          />
-          <textarea
-            rows="10"
-            cols="50"
-            className="translation-text-area"
-            defaultValue={translatedText}
-            aria-label="translation-text-area"
-          />
+          <div className="language-container">
+            <div className= "source-language-container">
+              <h3 className="source-language">{sourceLanguage}</h3>
+              <textarea
+                rows="10"
+                cols="30"
+                className="translation-text-area"
+                defaultValue={selectedText}
+                aria-label="translation-text-area"
+              />
+            </div>
+            <div className="target-language-container">
+              <Dropdown
+                className="translation-supported-languages-dropdown"
+                dataElement="translationSupportedLanguagesDropdown"
+                items={Object.keys(supportedLanguagesMap)}
+                // translationPrefix="option.notesOrder"
+                currentSelectionKey={targetLanguage}
+                onClickItem={language => setTargetLanguage(language)}
+                width={180}
+              />
+              <textarea
+                rows="10"
+                cols="30"
+                className="translation-text-area"
+                defaultValue={translatedText}
+                aria-label="translation-text-area"
+              />
+            </div>
+
+          </div>
         </div>
 
       </div>

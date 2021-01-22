@@ -44,17 +44,20 @@
         }
       }
     }
-
-    .translation-text-area {
-      resize: none;
-      // outline: none;
-      // border: none;
-      // width: 200px;
-      // margin-right: 3px;
-      // margin-left: 3px;
-      margin-top: 5px;
-      // height: auto;
-      // text-align: right;
+    .language-container {
+      display: flex;
+      .source-language {
+        margin: 10px 10px 11px 10px;
+      }
+      .target-language-container {
+        .Dropdown__wrapper {
+          margin: 5px;
+        }
+      }
+      .translation-text-area {
+        resize: none;
+        margin: 5px;
+      }
     }
   }
 }
