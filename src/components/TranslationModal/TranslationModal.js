@@ -4,10 +4,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Swipeable } from 'react-swipeable';
 
 import defaultTool from 'constants/defaultTool';
+import Dropdown from 'components/Dropdown';
 import core from 'core';
 import actions from 'actions';
 import selectors from 'selectors';
-import { translate } from "helpers/googleTranslate";
+import { translate, supportedLanguagesMap } from "helpers/googleTranslate";
 
 
 import './TranslationModal.scss';
@@ -18,21 +19,20 @@ const TranslationModal = () => {
     selectors.isElementOpen(state, 'translationModal'),
   ]);
   const dispatch = useDispatch();
-
   const selectedText = core.getSelectedText();
-  console.log('selectedText', selectedText);
-
   const [translatedText, setTranslatedText] = useState('');
+  const [targetLanguage, setTargetLanguage] = useState('Chinese (Simplified)');
+
   useEffect(() => {
     if (!isOpen) {
       return;
     }
     const go = async() => {
-      const translations = await translate(selectedText, 'zh');
+      const translations = await translate(selectedText, supportedLanguagesMap[targetLanguage]);
       setTranslatedText(translations[0].translatedText);
     };
     go();
-  }, [isOpen]);
+  }, [isOpen, targetLanguage]);
 
   const closeModal = () => {
     dispatch(actions.closeElement('translationModal'));
@@ -55,12 +55,26 @@ const TranslationModal = () => {
     >
       <div
         className={modalClass}
-        data-element="linkModal"
+        data-element="translationModal"
         onMouseDown={closeModal}
       >
         <div className="container" onMouseDown={e => e.stopPropagation()}>
           <div className="swipe-indicator" />
-          {selectedText} --{'>'} {translatedText}
+          <Dropdown
+            className="translation-supported-languages-dropdown"
+            dataElement="translationSupportedLanguagesDropdown"
+            items={Object.keys(supportedLanguagesMap)}
+            // translationPrefix="option.notesOrder"
+            currentSelectionKey={targetLanguage}
+            onClickItem={language => setTargetLanguage(language)}
+            width={180}
+          />
+          <textarea
+            rows="4" cols="50"
+            className="translation-text-area"
+            value={translatedText}
+            aria-label="translation-text-area"
+          />
         </div>
 
       </div>
