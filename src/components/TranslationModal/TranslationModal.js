@@ -10,6 +10,7 @@ import actions from 'actions';
 import selectors from 'selectors';
 import { translate, supportedLanguagesMap } from "helpers/googleTranslate";
 
+import i18next from 'i18next';
 
 import './TranslationModal.scss';
 
@@ -21,7 +22,17 @@ const TranslationModal = () => {
   const dispatch = useDispatch();
   const selectedText = core.getSelectedText();
   const [translatedText, setTranslatedText] = useState('');
-  const [targetLanguage, setTargetLanguage] = useState('Chinese (Simplified)');
+  const [targetLanguage, setTargetLanguage] = useState('');
+
+  useEffect(() => {
+    const onDocumentLoaded = () => {
+      const currentLanguage = i18next.language;
+      setTargetLanguage(Object.keys(supportedLanguagesMap).find(key => supportedLanguagesMap[key] === currentLanguage));
+    };
+
+    core.addEventListener('documentLoaded', onDocumentLoaded);
+    return () => core.removeEventListener('documentLoaded', onDocumentLoaded);
+  });
 
   useEffect(() => {
     if (!isOpen) {
@@ -32,7 +43,7 @@ const TranslationModal = () => {
       setTranslatedText(translations[0].translatedText);
     };
     go();
-  }, [isOpen, targetLanguage]);
+  }, [isOpen,targetLanguage]);
 
   const closeModal = () => {
     dispatch(actions.closeElement('translationModal'));
@@ -70,9 +81,10 @@ const TranslationModal = () => {
             width={180}
           />
           <textarea
-            rows="4" cols="50"
+            rows="10"
+            cols="50"
             className="translation-text-area"
-            value={translatedText}
+            defaultValue={translatedText}
             aria-label="translation-text-area"
           />
         </div>
