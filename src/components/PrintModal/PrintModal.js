@@ -158,7 +158,7 @@ class PrintModal extends React.PureComponent {
   };
 
   setPrintQuality = () => {
-    window.utils.setCanvasMultiplier(this.props.printQuality);
+    window.Core.setCanvasMultiplier(this.props.printQuality);
   };
 
   creatingPages = () => {
@@ -443,7 +443,7 @@ class PrintModal extends React.PureComponent {
   };
 
   resetPrintQuality = () => {
-    window.utils.unsetCanvasMultiplier();
+    window.Core.unsetCanvasMultiplier();
   };
 
   closePrintModal = () => {
