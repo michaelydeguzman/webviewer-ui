@@ -2,7 +2,7 @@ import getHashParams from 'helpers/getHashParams';
 
 export default () => {
   if (!window.bbAnnotManager) {
-    const serverURL = getHashParams('pdftronServer', '');
+    const serverURL = getHashParams('webviewerServerURL', '');
     window.bbAnnotManager = new window.CoreControls.BlackBoxAnnotationManager(serverURL, window.docViewer);
   }
 

@@ -28,7 +28,7 @@ export default (dispatch, src, options = {}) => {
 const getDefaultOptions = () => ({
   startOffline: getHashParams('startOffline', false),
   azureWorkaround: getHashParams('azureWorkaround', false),
-  pdftronServer: getHashParams('pdftronServer', ''),
+  webviewerServerURL: getHashParams('webviewerServerURL', ''),
   singleServerMode: getHashParams('singleServerMode', false),
   forceClientSideInit: getHashParams('forceClientSideInit', false),
   disableWebsockets: getHashParams('disableWebsockets', false),
