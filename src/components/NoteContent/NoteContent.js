@@ -333,6 +333,8 @@ const ContentArea = ({
     }
   };
 
+  
+
   return (
     <div className="edit-content">
       <NoteTextarea
@@ -342,6 +344,7 @@ const ContentArea = ({
         value={textAreaValue}
         onChange={value => onTextAreaValueChange(value, annotation.Id)}
         onSubmit={setContents}
+        onBlur={setContents}
         placeholder={`${t('action.comment')}...`}
         aria-label={`${t('action.comment')}...`}
       />

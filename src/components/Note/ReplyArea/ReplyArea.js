@@ -82,7 +82,11 @@ const ReplyArea = ({ annotation, isUnread, onPendingReplyChange }) => {
 
   const postReply = e => {
     // prevent the textarea from blurring out
-    e.preventDefault();
+
+    if (e) {
+      e.preventDefault();
+    }
+
     const replyText = pendingReplyMap[annotation.Id]
 
     if (!replyText) {
@@ -113,6 +117,20 @@ const ReplyArea = ({ annotation, isUnread, onPendingReplyChange }) => {
     setPendingReply('', annotation.Id);
   };
 
+  const handleCancelClick = () => {
+    setValue('');
+    textareaRef.current.blur();
+  };
+
+  const handleReplyDeselect = () => {
+    postReply();
+    setIsFocused(false);
+  };
+
+  const replyBtnClass = classNames({
+    disabled: !value,
+  });
+
   const ifReplyNotAllowed =
     isReadOnly ||
     isReplyDisabled ||
@@ -141,7 +159,7 @@ const ReplyArea = ({ annotation, isUnread, onPendingReplyChange }) => {
         value={pendingReplyMap[annotation.Id]}
         onChange={value => handleNoteTextareaChange(value)}
         onSubmit={postReply}
-        onBlur={() => setIsFocused(false)}
+        onBlur={handleReplyDeselect}
         onFocus={() => setIsFocused(true)}
         placeholder={`${t('action.reply')}...`}
         aria-label={`${t('action.reply')}...`}
